@@ -98,11 +98,11 @@ python HeuristicSparseMixture-of-Experts.py
 #### Key Hyperparameters
 | Parameter | Default Value | Description |
 |-----------|---------------|-------------|
-| `max_seq_length` | 512 | Maximum input sequence length |
+| `max_seq_length` | 512/1024/2048 | Maximum input sequence length |
 | `batch_size` | 8 | Training batch size per GPU |
 | `learning_rate` | 2e-4 | Learning rate for AdamW |
 | `lora_rank` | 16 | LoRA rank for QLoRA fine-tuning |
-| `num_epochs` | 3–6 | Training epochs (varies by dataset) |
+| `num_epochs` | 2/3/4/5/6 | Training epochs (varies by dataset) |
 
 #### Optimization Strategy
 - **Quantization**: 4-bit NormalFloat (NF4) via QLoRA
@@ -123,4 +123,5 @@ The HSMoE-FSA framework integrates:
 This project is released for academic research purposes only. Commercial use requires permission from the authors.
 
 ---
+
 
