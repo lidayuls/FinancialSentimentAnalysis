@@ -120,7 +120,7 @@ model = FastLanguageModel.get_peft_model(
 )
 
 # Load FinanceMath dataset for pretraining
-api_token = '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'
+api_token = ''#you api token here
 login(api_token)
 print("Login successful!")
 
