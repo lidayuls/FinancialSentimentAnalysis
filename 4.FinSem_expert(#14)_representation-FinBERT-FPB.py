@@ -25,6 +25,195 @@ Key Components:
 ===============================================================================
 """
 
+import subprocess
+import sys
+
+def get_installed_torch_version():
+    try:
+        import torch
+        return torch.__version__
+    except ImportError:
+        return None
+
+required_torch_version = "2.6.0+cu124"
+current_version = get_installed_torch_version()
+
+print(f"🔍 Current PyTorch version: {current_version}")
+print(f"🎯 Required PyTorch version: {required_torch_version}")
+
+if current_version == required_torch_version:
+    print("✅ PyTorch version is already correct. Skipping uninstall/install.")
+else:
+    print("⚠️ PyTorch version mismatch or not installed. Proceeding with reinstall...")
+
+    # Uninstall existing PyTorch packages
+    !pip uninstall torch torchvision torchaudio -y
+
+    # Install the correct PyTorch version
+    !pip install --no-cache-dir \
+        torch==2.6.0+cu124 \
+        torchvision==0.21.0+cu124 \
+        torchaudio==2.6.0+cu124 \
+        --index-url https://download.pytorch.org/whl/cu124
+
+    print("✅ PyTorch installation completed")
+
+
+# ===============================================
+# STEP 1: Uninstall existing packages
+# ===============================================
+
+# Uninstall PyTorch-related packages (if needed)
+# !pip uninstall torch torchvision torchaudio -y
+
+# Uninstall transformers-related packages
+!pip uninstall transformers accelerate peft trl -y
+
+# Uninstall quantization-related packages
+!pip uninstall bitsandbytes xformers triton -y
+
+# Uninstall unsloth-related packages
+!pip uninstall unsloth unsloth_zoo cut_cross_entropy -y
+
+print("✅ Uninstallation completed")
+
+# ===============================================
+# STEP 2: Install PyTorch 2.6.0 (compatible with xformers==0.0.29.post3)
+# ===============================================
+
+# !pip install --no-cache-dir \
+#   torch==2.6.0+cu124 \
+#   torchvision==0.21.0+cu124 \
+#   torchaudio==2.6.0+cu124 \
+#   --index-url https://download.pytorch.org/whl/cu124
+
+# print("✅ PyTorch installation completed")
+
+# ===============================================
+# STEP 3: Install core dependencies
+# ===============================================
+
+!pip install --no-cache-dir --no-deps numpy==1.26.4
+!pip install --no-cache-dir --no-deps packaging==25.0
+!pip install --no-cache-dir --no-deps filelock==3.18.0
+!pip install --no-cache-dir --no-deps pyyaml==6.0.2
+!pip install --no-cache-dir --no-deps regex==2024.11.6
+!pip install --no-cache-dir --no-deps requests==2.32.4
+!pip install --no-cache-dir --no-deps tqdm==4.67.1
+!pip install --no-cache-dir --no-deps typing-extensions==4.14.0
+
+print("✅ Core dependencies installed")
+
+# ===============================================
+# STEP 4: Install Transformers and related packages
+# ===============================================
+
+!pip install --no-cache-dir --no-deps transformers==4.55.4
+!pip install --no-cache-dir --no-deps tokenizers==0.21.2
+!pip install --no-cache-dir --no-deps safetensors==0.5.3
+
+print("✅ Transformers installed")
+
+# ===============================================
+# STEP 5: Install Hugging Face Hub and datasets
+# ===============================================
+
+!pip install --no-cache-dir --no-deps huggingface-hub==0.34.4
+!pip install --no-cache-dir --no-deps hf-transfer==0.1.9
+
+# Install dataset dependencies
+!pip install --no-cache-dir --no-deps pyarrow==19.0.1
+!pip install --no-cache-dir --no-deps dill==0.3.8
+!pip install --no-cache-dir --no-deps pandas==2.2.3
+!pip install --no-cache-dir --no-deps xxhash==3.5.0
+!pip install --no-cache-dir --no-deps multiprocess==0.70.16
+!pip install --no-cache-dir --no-deps fsspec==2025.3.0
+
+!pip install --no-cache-dir --no-deps datasets==3.6.0
+
+print("✅ Hugging Face packages installed")
+
+# ===============================================
+# STEP 6: Install training frameworks
+# ===============================================
+
+!pip install --no-cache-dir --no-deps accelerate==1.8.1
+!pip install --no-cache-dir --no-deps peft==0.15.2
+!pip install --no-cache-dir --no-deps trl==0.22.2
+
+print("✅ Training frameworks installed")
+
+# ===============================================
+# STEP 7: Install quantization and optimization packages
+# ===============================================
+
+!pip install --no-cache-dir --no-deps bitsandbytes==0.47.0
+!pip install --no-cache-dir --no-deps xformers==0.0.29.post3
+!pip install --no-cache-dir --no-deps triton==3.2.0
+
+print("✅ Quantization and optimization packages installed")
+
+# ===============================================
+# STEP 8: Install Unsloth dependencies
+# ===============================================
+
+!pip install --no-cache-dir --no-deps cut_cross_entropy==25.1.1
+!pip install --no-cache-dir --no-deps unsloth_zoo==2025.8.9
+!pip install --no-cache-dir --no-deps unsloth==2025.8.9
+
+print("✅ Unsloth dependencies installed")
+
+# ===============================================
+# STEP 9: Install other required packages
+# ===============================================
+
+!pip install --no-cache-dir --no-deps sentencepiece==0.2.0
+!pip install --no-cache-dir --no-deps protobuf==3.20.3
+
+print("✅ Additional packages installed")
+
+# ===============================================
+# STEP 10: Install Unsloth (latest GitHub version)
+# ===============================================
+
+!pip install --no-cache-dir --no-deps "unsloth @ git+https://github.com/lidayuls/unsloth.git"
+
+print("✅ Unsloth installed successfully")
+
+# ===============================================
+# STEP 11: Verify installation
+# ===============================================
+
+import torch
+import unsloth
+import transformers
+
+print("=" * 50)
+print("📦 Installation Verification")
+print("=" * 50)
+print(f"🔥 PyTorch version: {torch.__version__}")
+print(f"🤗 Transformers version: {transformers.__version__}")
+print(f"⚡ Unsloth version: {unsloth.__version__}")
+print(f"🎯 CUDA available: {torch.cuda.is_available()}")
+
+if torch.cuda.is_available():
+    print(f"💎 GPU count: {torch.cuda.device_count()}")
+    print(f"📍 Current GPU: {torch.cuda.get_device_name(0)}")
+
+print("=" * 50)
+print("✅ All packages installed successfully! Environment is ready.")
+print("=" * 50)
+
+# Test Unsloth functionality
+try:
+    from unsloth import FastLanguageModel
+    print("✅ Unsloth imported successfully and ready to use!")
+except Exception as e:
+    print(f"⚠️  Unsloth import error: {e}")
+
+
+
+
 !pip install evaluate
 
 import os
