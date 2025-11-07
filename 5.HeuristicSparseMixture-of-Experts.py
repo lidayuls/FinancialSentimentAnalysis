@@ -79,11 +79,11 @@ label2id = {"negative": 0, "neutral": 1, "positive": 2}
 
 # Load financial sentiment dataset based on configuration
 if dataset_name == "FPB":
-    my_dataset = load_dataset('./input/finhmoe-datasets/financial_phrasebank-sentences_50agree_processed')
+    my_dataset = load_dataset('/kaggle/input/finhmoe-datasets/financial_phrasebank-sentences_50agree_processed')
 elif dataset_name == "FiQA-SA":
-    my_dataset = load_dataset('./input/finhmoe-datasets/fiqa-2018_processed')
+    my_dataset = load_dataset('/kaggle/input/finhmoe-datasets/fiqa-2018_processed')
 elif dataset_name == "TFNS":
-    my_dataset = load_dataset('./input/finhmoe-datasets/twitter-financial-news-sentiment_processed')
+    my_dataset = load_dataset('/kaggle/input/finhmoe-datasets/twitter-financial-news-sentiment_processed')
 
 # Process label strings to numerical format
 labels_train = my_dataset["train"]["output"]
@@ -145,7 +145,7 @@ model_name_list = [dataset_name + "_" + i for i in model_name_list]
 # LOAD EXPERT HIDDEN STATES (PRE-COMPUTED REPRESENTATIONS)
 # =============================================================================
 # Load pre-computed hidden states from various expert models
-outputs_hiddens_path = "./input/outputs-hiddens-" + dataset_name.lower() + "/outputs_hiddens/"
+outputs_hiddens_path = "/kaggle/input/outputs-hiddens-" + dataset_name.lower() + "/outputs_hiddens/"
 outputs_hiddens_train_list = []
 outputs_hiddens_test_list = []
 outputs_hiddens_dim_list = []
@@ -182,7 +182,7 @@ train_loader = DataLoader(train_dataset, batch_size=8, shuffle=True)
 test_loader = DataLoader(test_dataset, batch_size=8, shuffle=False)
 
 # Save expert mapping for reference
-with open("./working/idx_to_expert_name.json", 'w', encoding='utf-8') as f:
+with open("/kaggle/working/idx_to_expert_name.json", 'w', encoding='utf-8') as f:
     json.dump(idx_to_expert_name, f, indent=4)
 
 # =============================================================================
@@ -475,7 +475,7 @@ for expert_index, expert_name in idx_to_expert_name.items():
     F1_Weighted_experts[expert_name] = f1_weighted
 
 # Save expert results
-excel_file_path = './working/results_per_expert_'+ dataset_name + '.xlsx'
+excel_file_path = '/kaggle/working/results_per_expert_'+ dataset_name + '.xlsx'
 results_per_expert.to_excel(excel_file_path, index=False)
 
 # =============================================================================
@@ -736,11 +736,11 @@ for router_model in router_models:
         })], ignore_index=True)
 
     # Save results
-    excel_file_path = './working/results_mixer_'+ router_model + '_' + dataset_name + '.xlsx'
+    excel_file_path = '/kaggle/working/results_mixer_'+ router_model + '_' + dataset_name + '.xlsx'
     results_mixer.to_excel(excel_file_path, index=False)
     
     # Save detailed classification report
-    output_path = './working/results_ClassificationReport_'  + dataset_name + "_HMoE_" + router_model + '.txt'
+    output_path = '/kaggle/working/results_ClassificationReport_'  + dataset_name + "_HMoE_" + router_model + '.txt'
     with open(output_path, 'w') as f:
         f.write(f"Acc: {acc:.5f}. F1 macro: {f1_macro:.5f}. F1 micro: {f1_micro:.5f}. F1 weighted: {f1_weighted:.5f}.\n")
         f.write(f"Classification_Report:\n {cr}.\n")
@@ -773,7 +773,7 @@ parameters = {
     "learning_rate_mixer": learning_rate_mixer
 }
 
-json_file_path = './working/model_parameters.json'
+json_file_path = '/kaggle/working/model_parameters.json'
 with open(json_file_path, 'w') as json_file:
     json.dump(parameters, json_file, indent=4)
 
