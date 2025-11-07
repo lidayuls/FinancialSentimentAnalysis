@@ -28,229 +28,53 @@ Key Components:
 
 
 
-import subprocess
-import sys
-
-def get_installed_torch_version():
-    try:
-        import torch
-        return torch.__version__
-    except ImportError:
-        return None
-
-required_torch_version = "2.6.0+cu124"
-current_version = get_installed_torch_version()
-
-print(f"🔍 Current PyTorch version: {current_version}")
-print(f"🎯 Required PyTorch version: {required_torch_version}")
-
-if current_version == required_torch_version:
-    print("✅ PyTorch version is already correct. Skipping uninstall/install.")
-else:
-    print("⚠️ PyTorch version mismatch or not installed. Proceeding with reinstall...")
-
-    # Uninstall existing PyTorch packages
-    !pip uninstall torch torchvision torchaudio -y
-
-    # Install the correct PyTorch version
-    !pip install --no-cache-dir \
-        torch==2.6.0+cu124 \
-        torchvision==0.21.0+cu124 \
-        torchaudio==2.6.0+cu124 \
-        --index-url https://download.pytorch.org/whl/cu124
-
-    print("✅ PyTorch installation completed")
-
-
-# ===============================================
-# STEP 1: Uninstall existing packages
-# ===============================================
-
-# Uninstall PyTorch-related packages (if needed)
-# !pip uninstall torch torchvision torchaudio -y
-
-# Uninstall transformers-related packages
-!pip uninstall transformers accelerate peft trl -y
-
-# Uninstall quantization-related packages
-!pip uninstall bitsandbytes xformers triton -y
-
-# Uninstall unsloth-related packages
-!pip uninstall unsloth unsloth_zoo cut_cross_entropy -y
-
-print("✅ Uninstallation completed")
-
-# ===============================================
-# STEP 2: Install PyTorch 2.6.0 (compatible with xformers==0.0.29.post3)
-# ===============================================
-
-# !pip install --no-cache-dir \
-#   torch==2.6.0+cu124 \
-#   torchvision==0.21.0+cu124 \
-#   torchaudio==2.6.0+cu124 \
-#   --index-url https://download.pytorch.org/whl/cu124
-
-# print("✅ PyTorch installation completed")
-
-# ===============================================
-# STEP 3: Install core dependencies
-# ===============================================
-
-!pip install --no-cache-dir --no-deps numpy==1.26.4
-!pip install --no-cache-dir --no-deps packaging==25.0
-!pip install --no-cache-dir --no-deps filelock==3.18.0
-!pip install --no-cache-dir --no-deps pyyaml==6.0.2
-!pip install --no-cache-dir --no-deps regex==2024.11.6
-!pip install --no-cache-dir --no-deps requests==2.32.4
-!pip install --no-cache-dir --no-deps tqdm==4.67.1
-!pip install --no-cache-dir --no-deps typing-extensions==4.14.0
-
-print("✅ Core dependencies installed")
-
-# ===============================================
-# STEP 4: Install Transformers and related packages
-# ===============================================
-
-!pip install --no-cache-dir --no-deps transformers==4.55.4
-!pip install --no-cache-dir --no-deps tokenizers==0.21.2
-!pip install --no-cache-dir --no-deps safetensors==0.5.3
-
-print("✅ Transformers installed")
-
-# ===============================================
-# STEP 5: Install Hugging Face Hub and datasets
-# ===============================================
-
-!pip install --no-cache-dir --no-deps huggingface-hub==0.34.4
-!pip install --no-cache-dir --no-deps hf-transfer==0.1.9
-
-# Install dataset dependencies
-!pip install --no-cache-dir --no-deps pyarrow==19.0.1
-!pip install --no-cache-dir --no-deps dill==0.3.8
-!pip install --no-cache-dir --no-deps pandas==2.2.3
-!pip install --no-cache-dir --no-deps xxhash==3.5.0
-!pip install --no-cache-dir --no-deps multiprocess==0.70.16
-!pip install --no-cache-dir --no-deps fsspec==2025.3.0
-
-!pip install --no-cache-dir --no-deps datasets==3.6.0
-
-print("✅ Hugging Face packages installed")
-
-# ===============================================
-# STEP 6: Install training frameworks
-# ===============================================
-
-!pip install --no-cache-dir --no-deps accelerate==1.8.1
-!pip install --no-cache-dir --no-deps peft==0.15.2
-!pip install --no-cache-dir --no-deps trl==0.22.2
-
-print("✅ Training frameworks installed")
-
-# ===============================================
-# STEP 7: Install quantization and optimization packages
-# ===============================================
-
-!pip install --no-cache-dir --no-deps bitsandbytes==0.47.0
-!pip install --no-cache-dir --no-deps xformers==0.0.29.post3
-!pip install --no-cache-dir --no-deps triton==3.2.0
-
-print("✅ Quantization and optimization packages installed")
-
-# ===============================================
-# STEP 8: Install Unsloth dependencies
-# ===============================================
-
-!pip install --no-cache-dir --no-deps cut_cross_entropy==25.1.1
-!pip install --no-cache-dir --no-deps unsloth_zoo==2025.8.9
-!pip install --no-cache-dir --no-deps unsloth==2025.8.9
-
-print("✅ Unsloth dependencies installed")
-
-# ===============================================
-# STEP 9: Install other required packages
-# ===============================================
-
-!pip install --no-cache-dir --no-deps sentencepiece==0.2.0
-!pip install --no-cache-dir --no-deps protobuf==3.20.3
-
-print("✅ Additional packages installed")
-
-# ===============================================
-# STEP 10: Install Unsloth (latest GitHub version)
-# ===============================================
-
-!pip install --no-cache-dir --no-deps "unsloth @ git+https://github.com/lidayuls/unsloth.git"
-
-print("✅ Unsloth installed successfully")
-
-# ===============================================
-# STEP 11: Verify installation
-# ===============================================
-
-import torch
-import unsloth
-import transformers
-
-print("=" * 50)
-print("📦 Installation Verification")
-print("=" * 50)
-print(f"🔥 PyTorch version: {torch.__version__}")
-print(f"🤗 Transformers version: {transformers.__version__}")
-print(f"⚡ Unsloth version: {unsloth.__version__}")
-print(f"🎯 CUDA available: {torch.cuda.is_available()}")
-
-if torch.cuda.is_available():
-    print(f"💎 GPU count: {torch.cuda.device_count()}")
-    print(f"📍 Current GPU: {torch.cuda.get_device_name(0)}")
-
-print("=" * 50)
-print("✅ All packages installed successfully! Environment is ready.")
-print("=" * 50)
-
-# Test Unsloth functionality
-try:
-    from unsloth import FastLanguageModel
-    print("✅ Unsloth imported successfully and ready to use!")
-except Exception as e:
-    print(f"⚠️  Unsloth import error: {e}")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Import Unsloth before other packages as required
 import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "0"  # Use only GPU 0
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
+!pip install -U uv --upgrade-strategy eager
 
+!uv pip install --index-url https://download.pytorch.org/whl/cu121 \
+  torch==2.5.1+cu121 torchvision==0.20.1+cu121 torchaudio==2.5.1+cu121
 
-# Import libraries
+!uv pip install --no-deps \
+  transformers==4.47.1 tokenizers==0.21.0 \
+  huggingface-hub==0.26.2 \
+  accelerate==1.0.0 \
+  datasets==2.21.0 safetensors==0.4.4 sentencepiece==0.2.0 "numpy<2"
+
+!uv pip install --no-cache-dir --no-deps "git+https://github.com/lidayuls/unsloth.git@mian-2025.1.14"
+!uv pip install --no-cache-dir --no-deps unsloth-zoo==2025.1.5
+
+!uv pip install bitsandbytes==0.45.1 --no-deps -v
+!uv pip install trl==0.11.4 --no-deps -v
+
+!uv pip install --no-deps xformers==0.0.29.post1
+
+    
+
 from unsloth import FastLanguageModel
+import os
 import random
 import torch
 import numpy as np
-from transformers import AutoTokenizer, TrainingArguments
+import torch.nn as nn
+from torch.nn import functional as F
+from transformers import AutoTokenizer, AutoModel, TrainingArguments, Trainer, DataCollatorWithPadding
+from datasets import load_dataset, Dataset, DatasetDict
 from trl import SFTTrainer
-import datasets
-from datasets import load_dataset
-from huggingface_hub import HfApi, login
 from tqdm.notebook import tqdm
-from torch.utils.data import DataLoader
-from transformers import DataCollatorWithPadding
-from collections import Counter
-from sklearn.metrics import f1_score, confusion_matrix, accuracy_score, classification_report
+from torch.utils.data import DataLoader, TensorDataset
 import shutil
+import zipfile
+import datetime
+import sys
+from sklearn.metrics import f1_score, confusion_matrix, accuracy_score, classification_report
+from collections import Counter
+from unsloth import is_bfloat16_supported
 
-# Set random seeds for reproducibility
+
+# --- Configuration ---
+# Set seed for reproducibility
 random.seed(42)
 np.random.seed(42)
 torch.manual_seed(42)
@@ -258,6 +82,7 @@ if torch.cuda.is_available():
     torch.cuda.manual_seed_all(42)
 
 
+    
 
 
 
@@ -267,7 +92,7 @@ if torch.cuda.is_available():
 # Load and preprocess EFSA dataset
 !git clone https://github.com/cty1934/EFSA.git
 import json
-file_path = "./working/EFSA/data/data.json"
+file_path = "/kaggle/working/EFSA/data/data.json"
 with open(file_path, 'r', encoding='utf-8') as file:
     data = json.load(file)
 #print(len(data))
@@ -320,7 +145,7 @@ print(f"Processed data saved to {processed_file}")
 
 # Load the translated EFSA dataset
 
-efsa_dataset = load_dataset("./input/efsa-translated")
+efsa_dataset = load_dataset("/kaggle/input/efsa-translated")
 
 
 
@@ -409,6 +234,8 @@ trainer = SFTTrainer(
         warmup_steps=5,
         num_train_epochs=1,
         learning_rate=2e-4,
+        fp16 = not is_bfloat16_supported(),
+        bf16 = is_bfloat16_supported(),
         logging_steps=1,
         optim="adamw_8bit",
         weight_decay=0.01,
@@ -448,11 +275,11 @@ label2id = {"negative": 0, "neutral": 1, "positive": 2}
 
 # Load appropriate sentiment dataset
 if dataset_name == "FPB":
-    sentiment_dataset = load_dataset('./input/finhmoe-datasets/financial_phrasebank-sentences_50agree_processed')
+    sentiment_dataset = load_dataset('/kaggle/input/finhmoe-datasets/financial_phrasebank-sentences_50agree_processed')
 elif dataset_name == "FiQA-SA":
-    sentiment_dataset = load_dataset('./input/finhmoe-datasets/fiqa-2018_processed')
+    sentiment_dataset = load_dataset('/kaggle/input/finhmoe-datasets/fiqa-2018_processed')
 elif dataset_name == "TFNS":
-    sentiment_dataset = load_dataset('./input/finhmoe-datasets/twitter-financial-news-sentiment_processed')
+    sentiment_dataset = load_dataset('/kaggle/input/finhmoe-datasets/twitter-financial-news-sentiment_processed')
 else:
     raise ValueError("Invalid dataset name provided.")
 
