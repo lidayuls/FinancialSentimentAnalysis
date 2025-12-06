@@ -110,10 +110,9 @@ The HSMoE-FSA framework integrates:
 4. **Phased Optimization**: Decouples expert training from router calibration to ensure stability.
 
 
-## License
-This project is released for academic research purposes only. Commercial use requires permission from the authors.
 
 ---
+
 
 
 
