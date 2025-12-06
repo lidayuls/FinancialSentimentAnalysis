@@ -95,19 +95,10 @@ python HeuristicSparseMixture-of-Experts.py
 - **GPUs**: 4×NVIDIA A100 80GB GPUs (recommended for full expert training)
 - **VRAM**: Minimum 40GB per GPU for 7B models; 80GB for larger experts
 
-#### Key Hyperparameters
-| Parameter | Default Value | Description |
-|-----------|---------------|-------------|
-| `max_seq_length` | 512/1024/2048 | Maximum input sequence length |
-| `batch_size` | 8 | Training batch size per GPU |
-| `learning_rate` | 2e-4 | Learning rate for AdamW |
-| `lora_rank` | 16 | LoRA rank for QLoRA fine-tuning |
-| `num_epochs` | 2/3/4/5/6 | Training epochs (varies by dataset) |
-
 #### Optimization Strategy
 - **Quantization**: 4-bit NormalFloat (NF4) via QLoRA
-- **Adapter**: Low-Rank Adaptation (LoRA) with rank 16
-- **Optimizer**: AdamW with β₁=0.9, β₂=0.999
+- **Adapter**: Low-Rank Adaptation (LoRA)
+- **Optimizer**: AdamW
 - **Phased Training**: Expert specialization → Routing calibration
 
 ## Methodology
@@ -123,5 +114,6 @@ The HSMoE-FSA framework integrates:
 This project is released for academic research purposes only. Commercial use requires permission from the authors.
 
 ---
+
 
 
